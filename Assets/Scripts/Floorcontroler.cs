@@ -2,26 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Floorcontroler : MonoBehaviour
+public class Floorcontroller : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public GameObject FloorTile1, FloorTile2;
+    public GameObject floorTile1, floorTile2;
+    public GameObject[] tiles;
 
-
-    // Update is called once per frame
     void FixedUpdate()
     {
-        FloorTile1.transform.position -= new Vector3(GameManager.instance.wordScrollingSpeed, 0f, 0f);
-    
+        floorTile1.transform.position -= new Vector3(
+            GameManager.instance.wordScrollingSpeed, 
+            0f, 
+            0f
+        );
+        floorTile2.transform.position -= new Vector3(
+            GameManager.instance.wordScrollingSpeed, 
+            0f, 
+            0f
+        );
 
-        FloorTile2.transform.position -= new Vector3(GameManager.instance.wordScrollingSpeed, 0f, 0f);
-        if (FloorTile2.transform.position.x < 0f)
+        if (floorTile2.transform.position.x < 0f)
         {
-            FloorTile1.transform.position += new Vector3(32f, 0f, 0f);
+            int index = Random.Range(0, tiles.Length);
+            var newTile = Instantiate(
+                tiles[index],
+                floorTile2.transform.position + new Vector3(16f, 0f, 0f), 
+                Quaternion.identity
+            );
 
-            var temp = FloorTile1;
-            FloorTile1 = FloorTile2;
-            FloorTile2 = temp;
+            Destroy(floorTile1);
+
+            floorTile1 = floorTile2;
+            floorTile2 = newTile;
         }
     }
 }
